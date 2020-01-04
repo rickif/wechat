@@ -195,15 +195,20 @@ func NewTransferToCustomerService(to, from string, timestamp int64, kfAccount st
 }
 
 type MiniProgram struct {
+	XMLName struct{} `xml:"xml" json:"-"`
 	core.MsgHeader
-	Title           string           `json:"title"`
-	AppId           string           `json:"appid"`
-	PagePath        string           `json:"pagepath"`
-	ThumbMediaId    string           `json:"thumb_media_id"`
-	CustomerService *CustomerService `json:"customservice"`
+	MiniProgram     *miniProgramPage `json:"miniprogrampage"`
+	CustomerService *customerService `json:"customservice"`
 }
 
-type CustomerService struct {
+type miniProgramPage struct {
+	Title        string `json:"title"`
+	AppId        string `json:"appid"`
+	PagePath     string `json:"pagepath"`
+	ThumbMediaId string `json:"thumb_media_id"`
+}
+
+type customerService struct {
 	KfAccount string `json:"kf_account"`
 }
 
@@ -215,14 +220,16 @@ func NewMiniProgram(to, from string, timestamp int64, title, appId, pagePath, th
 			CreateTime:   timestamp,
 			MsgType:      MsgTypeMiniProgram,
 		},
-		Title:        title,
-		AppId:        appId,
-		PagePath:     pagePath,
-		ThumbMediaId: thumbMediaId,
+		MiniProgram: &miniProgramPage{
+			Title:        title,
+			AppId:        appId,
+			PagePath:     pagePath,
+			ThumbMediaId: thumbMediaId,
+		},
 	}
 
 	if kfAccount != "" {
-		program.CustomerService = &CustomerService{
+		program.CustomerService = &customerService{
 			KfAccount: kfAccount,
 		}
 	}
