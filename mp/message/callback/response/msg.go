@@ -13,6 +13,7 @@ const (
 	MsgTypeMusic                   core.MsgType = "music"                     // 音乐消息
 	MsgTypeNews                    core.MsgType = "news"                      // 图文消息
 	MsgTypeTransferCustomerService core.MsgType = "transfer_customer_service" // 将消息转发到多客服
+	MsgTypeMiniProgram             core.MsgType = "miniprogrampage"
 )
 
 // 文本消息
@@ -191,4 +192,39 @@ func NewTransferToCustomerService(to, from string, timestamp int64, kfAccount st
 		}
 	}
 	return
+}
+
+type MiniProgram struct {
+	core.MsgHeader
+	Title           string           `json:"title"`
+	AppId           string           `json:"appid"`
+	PagePath        string           `json:"pagepath"`
+	ThumbMediaId    string           `json:"thumb_media_id"`
+	CustomerService *CustomerService `json:"customservice"`
+}
+
+type CustomerService struct {
+	KfAccount string `json:"kf_account"`
+}
+
+func NewMiniProgram(to, from string, timestamp int64, title, appId, pagePath, thumbMediaId, kfAccount string) (program *MiniProgram) {
+	program = &MiniProgram{
+		MsgHeader: core.MsgHeader{
+			ToUserName:   to,
+			FromUserName: from,
+			CreateTime:   timestamp,
+			MsgType:      MsgTypeMiniProgram,
+		},
+		Title:        title,
+		AppId:        appId,
+		PagePath:     pagePath,
+		ThumbMediaId: thumbMediaId,
+	}
+
+	if kfAccount != "" {
+		program.CustomerService = &CustomerService{
+			KfAccount: kfAccount,
+		}
+	}
+	return program
 }
