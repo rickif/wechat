@@ -59,8 +59,9 @@ type MixedMsg struct {
 		PoiName   string  `xml:"Poiname"    json:"Poiname"`
 	} `xml:"SendLocationInfo,omitempty" json:"SendLocationInfo,omitempty"`
 
-	MsgID    int64  `xml:"MsgID"  json:"MsgID"`  // template, mass
-	Status   string `xml:"Status" json:"Status"` // template, mass
+	MsgID  int64  `xml:"MsgID"  json:"MsgID"`  // template, mass
+	Status string `xml:"Status" json:"Status"` // template, mass
+	/*
 	*mass           // mass
 	*account        // account
 	*dkf            // dkf
@@ -68,6 +69,7 @@ type MixedMsg struct {
 	*card           // card
 	*bizwifi        // bizwifi
 	*file           // MsgType is file
+	 */
 
 	// shakearound
 	ChosenBeacon *struct {
